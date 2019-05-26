@@ -76,7 +76,8 @@ export abstract class BaseTableComponent<T> implements AfterViewInit {
 		const take = this.paginator.pageSize;
 
 		const requestUrl =
-			`http://localhost:3000/${this.entityName}/findAndCount?skip=${skip}&take=${take}`;
+			`http://localhost:3000/${this.entityName}/findAndCount?` +
+			`skip=${skip}&take=${take}&order=${this.sort.active}&orderDir=${this.sort.direction}`;
 
 		console.log(requestUrl);
 
