@@ -7,12 +7,14 @@ import { HttpClientModule } from '@angular/common/http';
 import { AppComponent } from './app.component';
 import { BasicComponent } from './basic/basic.component';
 import { ServerComponent } from './server/server.component';
+import { InheritComponent } from './inherit/inherit.component';
 import { TestGitAPIComponent } from './test-gitapi/test-gitapi.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    BasicComponent,
+	BasicComponent,
+	InheritComponent,
     ServerComponent,
     TestGitAPIComponent
   ],

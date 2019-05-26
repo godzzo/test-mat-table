@@ -1,4 +1,4 @@
-import { Component, ViewChild, AfterViewInit, OnInit } from '@angular/core';
+import { ViewChild, AfterViewInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
 import { MatPaginator, MatSort } from '@angular/material';
@@ -6,26 +6,23 @@ import { MatPaginator, MatSort } from '@angular/material';
 import {merge, Observable, of as observableOf} from 'rxjs';
 import {catchError, map, startWith, switchMap} from 'rxjs/operators';
 
-@Component({
-  selector: 'app-server',
-  templateUrl: './server.component.html',
-  styleUrls: ['./server.component.scss']
-})
-export class ServerComponent implements AfterViewInit {
-	displayedColumns: string[] = ['id', 'firstName', 'lastName'];
+export abstract class BaseTableComponent<T> implements AfterViewInit {
+	displayedColumns: string[] = [];
 
 	@ViewChild(MatPaginator) paginator: MatPaginator;
 	@ViewChild(MatSort) sort: MatSort;
 
-	data: Actor[];
+	data: T[];
 
 	totalCount = -1;
 
-	// http://localhost:3000/actor/find?skip=10%20&take=50
+	entityName: string;
 
-	constructor(
-		private http: HttpClient
-	) { }
+	http: HttpClient;
+
+	constructor(http: HttpClient) {
+		this.http = http;
+	}
 
 	// Azért kell az AfterView mert akkor már a paginator inicializálva van, előtte  csak undefined!
 	ngAfterViewInit() {
@@ -79,18 +76,10 @@ export class ServerComponent implements AfterViewInit {
 		const take = this.paginator.pageSize;
 
 		const requestUrl =
-			`http://localhost:3000/actor/findAndCount?skip=${skip}&take=${take}`;
+			`http://localhost:3000/${this.entityName}/findAndCount?skip=${skip}&take=${take}`;
 
 		console.log(requestUrl);
 
-		return this.http.get<Actor[]>(requestUrl);
+		return this.http.get(requestUrl);
 	}
-}
-
-// {"id":11,"firstName":"ZERO","lastName":"CAGE","lastUpdate":"2006-02-15T03:34:33.000Z"}
-export interface Actor {
-	id: number;
-	firstName: string;
-	lastName: string;
-	lastUpdate: string;
 }
